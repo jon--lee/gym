@@ -181,7 +181,7 @@ class CartPoleEnvContinuous(CartPoleEnv):
 
     def __init__(self):
         CartPoleEnv.__init__(self)
-        self.weights = [1e-1, 1e-1, 1.0, 1.0]
+        self.weights = [0.0, 0.0, 1.0, 1.0]
         self.theta_threshold_radians = 60 * 2 * math.pi / 360 #12 * 2 * math.pi / 360
     
     def reset(self):

@@ -72,6 +72,14 @@ register(
     reward_threshold=195.0,
 )
 
+register(
+    id='CartPoleAlt2-v0',
+    entry_point='gym.envs.classic_control:CartPoleEnvAlt2',
+    max_episode_steps=200,
+    reward_threshold=195.0,
+)
+
+
 
 register(
     id='CartPole-v1',

@@ -73,6 +73,14 @@ register(
 )
 
 register(
+    id='CartPoleAltRandom-v0',
+    entry_point='gym.envs.classic_control:CartPoleEnvAltRandom',
+    max_episode_steps=200,
+    reward_threshold=195.0,
+)
+
+
+register(
     id='CartPoleAlt2-v0',
     entry_point='gym.envs.classic_control:CartPoleEnvAlt2',
     max_episode_steps=200,
@@ -243,6 +251,13 @@ register(
 )
 
 register(
+    id='ReacherAlt-v2',
+    entry_point='gym.envs.mujoco:ReacherEnvAlt',
+    max_episode_steps=50,
+    reward_threshold=-3.75,
+)
+
+register(
     id='Pusher-v2',
     entry_point='gym.envs.mujoco:PusherEnv',
     max_episode_steps=100,
@@ -280,6 +295,13 @@ register(
 register(
     id='HalfCheetah-v2',
     entry_point='gym.envs.mujoco:HalfCheetahEnv',
+    max_episode_steps=1000,
+    reward_threshold=4800.0,
+)
+
+register(
+    id='HalfCheetahAlt-v2',
+    entry_point='gym.envs.mujoco:HalfCheetahEnvAlt',
     max_episode_steps=1000,
     reward_threshold=4800.0,
 )

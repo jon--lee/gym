@@ -204,6 +204,19 @@ class CartPoleEnvAlt(CartPoleEnv):
         return np.array(self.state), reward, False, {}
 
 
+class CartPoleEnvAltRandom(CartPoleEnvAlt):
+
+    def __init__(self):
+        CartPoleEnvAlt.__init__(self)
+        self.init_state = None
+
+    def reset(self):
+        # self.state = self.np_random.uniform(low=-0.05, high=0.05, size=(4,))
+        self.state = self.init_state.copy()
+        self.steps_beyond_done = None
+        return np.array(self.state)
+
+
 
 class CartPoleEnvAlt2(CartPoleEnv):
 

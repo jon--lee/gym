@@ -22,6 +22,9 @@ class AntEnv(mujoco_env.MujocoEnv, utils.EzPickle):
             and state[2] >= 0.2 and state[2] <= 1.0
         done = not notdone
         ob = self._get_obs()
+
+        return ob, forward_reward, done, None
+
         return ob, reward, done, dict(
             reward_forward=forward_reward,
             reward_ctrl=-ctrl_cost,
@@ -36,8 +39,8 @@ class AntEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         ])
 
     def reset_model(self):
-        qpos = self.init_qpos + self.np_random.uniform(size=self.model.nq, low=-.1, high=.1)
-        qvel = self.init_qvel + self.np_random.randn(self.model.nv) * .1
+        qpos = self.init_qpos #+ self.np_random.uniform(size=self.model.nq, low=-.1, high=.1)
+        qvel = self.init_qvel #+ self.np_random.randn(self.model.nv) * .1
         self.set_state(qpos, qvel)
         return self._get_obs()
 

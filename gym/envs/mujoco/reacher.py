@@ -41,3 +41,31 @@ class ReacherEnv(mujoco_env.MujocoEnv, utils.EzPickle):
             self.sim.data.qvel.flat[:2],
             self.get_body_com("fingertip") - self.get_body_com("target")
         ])
+
+
+class ReacherEnvAlt(ReacherEnv):
+
+    def __init__(self):
+        self.force_mag = None
+        ReacherEnv.__init__(self)
+
+    def reset_model(self):
+        qpos = self.init_qpos
+        while True:
+            # self.goal = np.array([-0.1331967, -0.0347986])
+            self.goal = np.array([0.01845548, 0.02826319])
+            # self.goal = self.np_random.uniform(low=-.2, high=.2, size=2)
+            if np.linalg.norm(self.goal) < 2:
+                break
+        qpos[-2:] = self.goal
+        qvel = self.init_qvel
+        qvel[-2:] = 0
+        self.set_state(qpos, qvel)
+        return self._get_obs()
+
+
+    def step(self, a):
+        if self.force_mag is None:
+            return ReacherEnv.step(self, a)
+        return ReacherEnv.step(self, self.force_mag * a)
+

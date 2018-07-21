@@ -13,12 +13,18 @@ class PendulumEnv(gym.Env):
     def __init__(self):
         self.max_speed=8
         self.max_torque=2.
+        self.max_speed=30.0
+        self.max_torque=30.0
         self.dt=.05
         self.viewer = None
-
+        self.force_mag = 1.0
         high = np.array([1., 1., self.max_speed])
         self.action_space = spaces.Box(low=-self.max_torque, high=self.max_torque, shape=(1,))
         self.observation_space = spaces.Box(low=-high, high=high)
+
+        self.g = 10.0
+        self.m = 1.
+        self.l = 1.
 
         self.seed()
 
@@ -29,25 +35,30 @@ class PendulumEnv(gym.Env):
     def step(self,u):
         th, thdot = self.state # th := theta
 
-        g = 10.
-        m = 1.
-        l = 1.
+        g = self.g
+        m = self.m
+        l = self.l
         dt = self.dt
 
-        u = np.clip(u, -self.max_torque, self.max_torque)[0]
+        u = self.force_mag * np.clip(u, -self.max_torque, self.max_torque)[0]
         self.last_u = u # for rendering
-        costs = angle_normalize(th)**2 + .1*thdot**2 + .001*(u**2)
+        # costs = angle_normalize(th)**2 + .1*thdot**2 + .001*(u**2)
+        costs = angle_normalize(th)**2
 
         newthdot = thdot + (-3*g/(2*l) * np.sin(th + np.pi) + 3./(m*l**2)*u) * dt
         newth = th + newthdot*dt
         newthdot = np.clip(newthdot, -self.max_speed, self.max_speed) #pylint: disable=E1111
 
-        self.state = np.array([newth, newthdot])
+        self.state = np.array([angle_normalize(newth), newthdot])
         return self._get_obs(), -costs, False, {}
 
     def reset(self):
         high = np.array([np.pi, 1])
-        self.state = self.np_random.uniform(low=-high, high=high)
+        
+        # self.state = self.np_random.uniform(low=-high, high=high)
+        self.state = np.array([ 2.98279493, -0.01589684])           # must gain momentum
+        # self.state = np.array([ 0.49943951, -0.83702609])           # can fall into upright position
+
         self.last_u = None
         return self._get_obs()
 
@@ -86,3 +97,20 @@ class PendulumEnv(gym.Env):
 
 def angle_normalize(x):
     return (((x+np.pi) % (2*np.pi)) - np.pi)
+
+
+
+
+class PendulumEnvAlt(PendulumEnv):
+
+    def __init__(self):
+        PendulumEnv.__init__(self)
+        high = np.array([1000 * np.pi, self.max_speed])
+        self.action_space = spaces.Box(low=-self.max_torque, high=self.max_torque, shape=(1,))
+        self.observation_space = spaces.Box(low=-high, high=high)
+
+
+    def _get_obs(self):
+        theta, thetadot = self.state
+        return np.array([theta, thetadot])
+

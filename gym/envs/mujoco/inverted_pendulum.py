@@ -8,6 +8,7 @@ class InvertedPendulumEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         mujoco_env.MujocoEnv.__init__(self, 'inverted_pendulum.xml', 2)
 
     def step(self, a):
+        a = self.force_mag * a
         reward = 1.0
         self.do_simulation(a, self.frame_skip)
         ob = self._get_obs()

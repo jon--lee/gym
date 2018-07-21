@@ -8,6 +8,7 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         utils.EzPickle.__init__(self)
 
     def step(self, action):
+        a = self.force_mag * action
         xposbefore = self.sim.data.qpos[0]
         self.do_simulation(action, self.frame_skip)
         xposafter = self.sim.data.qpos[0]
@@ -26,8 +27,8 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         ])
 
     def reset_model(self):
-        qpos = self.init_qpos + self.np_random.uniform(low=-.1, high=.1, size=self.model.nq)
-        qvel = self.init_qvel + self.np_random.randn(self.model.nv) * .1
+        qpos = self.init_qpos# + self.np_random.uniform(low=-.1, high=.1, size=self.model.nq)
+        qvel = self.init_qvel# + self.np_random.randn(self.model.nv) * .1
         self.set_state(qpos, qvel)
         return self._get_obs()
 

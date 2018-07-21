@@ -31,7 +31,7 @@ class MujocoEnv(gym.Env):
         self.data = self.sim.data
         self.viewer = None
         self._viewers = {}
-
+        self.force_mag = 1.0
         self.metadata = {
             'render.modes': ['human', 'rgb_array'],
             'video.frames_per_second': int(np.round(1.0 / self.dt))

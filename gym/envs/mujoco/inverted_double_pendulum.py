@@ -9,6 +9,7 @@ class InvertedDoublePendulumEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         utils.EzPickle.__init__(self)
 
     def step(self, action):
+        a = self.force_mag * action
         self.do_simulation(action, self.frame_skip)
         ob = self._get_obs()
         x, _, y = self.sim.data.site_xpos[0]

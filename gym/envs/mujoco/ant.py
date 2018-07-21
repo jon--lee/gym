@@ -8,6 +8,7 @@ class AntEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         utils.EzPickle.__init__(self)
 
     def step(self, a):
+        a = self.force_mag * a
         xposbefore = self.get_body_com("torso")[0]
         self.do_simulation(a, self.frame_skip)
         xposafter = self.get_body_com("torso")[0]

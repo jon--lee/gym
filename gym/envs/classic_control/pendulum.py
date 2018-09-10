@@ -3,7 +3,7 @@ from gym import spaces
 from gym.utils import seeding
 import numpy as np
 from os import path
-
+import IPython
 class PendulumEnv(gym.Env):
     metadata = {
         'render.modes' : ['human', 'rgb_array'],
@@ -55,10 +55,11 @@ class PendulumEnv(gym.Env):
     def reset(self):
         high = np.array([np.pi, 1])
         
-        # self.state = self.np_random.uniform(low=-high, high=high)
-        self.state = np.array([ 2.98279493, -0.01589684])           # must gain momentum
+        self.state = self.np_random.uniform(low=-high, high=high)
+        IPython.embed()
+        # self.state = np.array([ 2.98279493, -0.01589684])           # must gain momentum
         # self.state = np.array([ 0.49943951, -0.83702609])           # can fall into upright position
-
+        print(self.state)
         self.last_u = None
         return self._get_obs()
 
